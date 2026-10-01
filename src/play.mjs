@@ -38,7 +38,13 @@ if (flag('target-mode')) cfg.target = { ...cfg.target, mode: flag('target-mode')
 if (flag('target')) cfg.target = { ...cfg.target, mode: 'score', score: +flag('target') };
 if (flag('retries')) cfg.retries = +flag('retries');
 if (flag('max-seconds')) cfg.run = { ...(cfg.run || {}), maxSeconds: +flag('max-seconds') };
+// Precedence: --port flag > $PORT > config.json → port > 8322
 if (flag('port')) cfg.port = +flag('port');
+else if (process.env.PORT) cfg.port = +process.env.PORT;
+else if (!cfg.port) cfg.port = 8322;
+// Precedence: $RAENEST_API > config.json → apiBase > built-in default
+if (process.env.RAENEST_API) cfg.apiBase = process.env.RAENEST_API;
+else if (!cfg.apiBase) cfg.apiBase = 'https://fun.raenest.com';
 if (has('headful')) cfg.browser = { ...(cfg.browser || {}), headless: false };
 if (has('no-post')) cfg.post = { ...(cfg.post || {}), enabled: false };
 if (flag('profile')) cfg.browser = { ...(cfg.browser || {}), userDataDir: path.resolve(flag('profile')) };

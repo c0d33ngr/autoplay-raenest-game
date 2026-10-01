@@ -46,6 +46,14 @@ Exit codes: `0` target met or all-time beaten · `3` finished without meeting ta
 
 CLI flags: `--name --role --city --margin --target-mode --target --retries --max-seconds --port --headful --no-post --profile <dir> --video [--video-fps N] --no-video`
 
+Environment variables:
+
+| var | where | precedence (highest first) |
+|---|---|---|
+| `PORT` | `play.mjs`, standalone `server.mjs` | `--port` flag → `$PORT` → `config.json` → `8322` |
+| `RAENEST_API` | `play.mjs`, `leaderboard.mjs` | `$RAENEST_API` → `config.json` → `https://fun.raenest.com` |
+| `RAENEST_CHROME` | `play.mjs`, `test/hook.test.mjs` | `browser.executablePath` (config) → `$RAENEST_CHROME` → auto-detect |
+
 Examples:
 
 ```bash
