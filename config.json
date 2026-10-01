@@ -1,0 +1,13 @@
+{
+  "name": "c0d33ngr",
+  "role": "freelancer",
+  "city": "lagos",
+  "port": 8322,
+  "apiBase": "https://fun.raenest.com",
+  "target": { "mode": "beat_all_time", "margin": 0.2 },
+  "retries": 5,
+  "run": { "maxSeconds": 0 },
+  "video": { "enabled": true, "fps": 10, "quality": 70 },
+  "browser": { "executablePath": "", "headless": true, "userDataDir": "out/profile" },
+  "post": { "enabled": true }
+}

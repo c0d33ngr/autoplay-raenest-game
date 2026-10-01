@@ -1,0 +1,20 @@
+{
+  "name": "ai-agent-raenest-game",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Self-contained agent that plays Raenest Run (fun.raenest.com) on a local server with an injected in-page driver and posts large-margin all-time leaderboard wins, per role.",
+  "private": true,
+  "scripts": {
+    "build": "node src/patch.mjs",
+    "serve": "node src/server.mjs",
+    "board": "node src/leaderboard.mjs",
+    "play": "node src/play.mjs",
+    "smoke": "node src/play.mjs --target 1200 --retries 1 --no-post --profile out/profile-smoke --max-seconds 420"
+  },
+  "dependencies": {
+    "puppeteer-core": "^24.0.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
