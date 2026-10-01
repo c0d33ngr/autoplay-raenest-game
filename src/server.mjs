@@ -21,7 +21,7 @@ function readBody(req) {
     req.on('error', rej);
   });
 }
-export async function startServer({ port = 8321, apiBase = 'https://fun.raenest.com', htmlPath = null, hostname = '127.0.0.1', log = true } = {}) {
+export async function startServer({ port = 8322, apiBase = 'https://fun.raenest.com', htmlPath = null, hostname = '127.0.0.1', log = true } = {}) {
   const htmlFile = htmlPath || path.join(root, 'out', 'raenest.patched.html');
   const note = m => log && console.error(`[server] ${m}`);
   const loadHtml = () => fs.readFileSync(htmlFile, 'utf8'); // re-read per request: re-patching takes effect without restart
@@ -65,7 +65,7 @@ export async function startServer({ port = 8321, apiBase = 'https://fun.raenest.
 const isMain = process.argv[1] && pathToFileURL(process.argv[1]).href === import.meta.url;
 if (isMain) {
   const cfg = JSON.parse(fs.readFileSync(path.join(root, 'config.json'), 'utf8'));
-  const port = process.env.PORT ? +process.env.PORT : (cfg.port || 8321);
+  const port = process.env.PORT ? +process.env.PORT : (cfg.port || 8322);
   startServer({ port, apiBase: cfg.apiBase || 'https://fun.raenest.com' })
     .then(s => console.log(`[server] ready on ${s.url} — game at ${s.url}, leaderboard proxied via /api/scores`))
     .catch(e => { console.error('[server] failed to start:', e.message); process.exit(1); });

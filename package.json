@@ -9,6 +9,7 @@
     "serve": "node src/server.mjs",
     "board": "node src/leaderboard.mjs",
     "play": "node src/play.mjs",
+    "test": "node --test",
     "smoke": "node src/play.mjs --target 1200 --retries 1 --no-post --profile out/profile-smoke --max-seconds 420"
   },
   "dependencies": {

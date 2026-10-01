@@ -64,7 +64,7 @@ node src/leaderboard.mjs freelancer                       # one role only
 flowchart LR
   A[game/raenest.html<br>pristine] -->|src/hook.js| P[patch.mjs]
   P --> B[out/raenest.patched.html]
-  B --> S[server.mjs :8321<br>+ /api/scores proxy]
+  B --> S[server.mjs :8322<br>+ /api/scores proxy]
   S --> C[headless Chrome<br>puppeteer-core]
   C --> D[driver autoStep<br>every animation frame]
   D -->|score ≥ target| F[__forceCrash → 'over']
@@ -87,6 +87,16 @@ flowchart LR
 - **`src/leaderboard.mjs`** — board client + CLI (`npm run board`).
 - **`src/post.mjs`** — re-post a finished run directly (after a failed in-page post): `node src/post.mjs --report out/report-<ts>-a1.json` (the report carries name/role/city/fingerprint/score). Same fingerprint = same leaderboard identity; the server keeps the player's best.
 Driver tuning knobs (in `src/hook.js`): `COLBAND`, `CAP`, TTC weight `* 0.5`, lane-stay `+22`, center bias, attraction weights/distance windows, trace sample rate.
+
+## Tests
+
+`npm test` — deterministic, no network, no live leaderboard (a few seconds; `test/hook.test.mjs` needs a local Chrome/Chromium, same auto-detect as `play.mjs` or `RAENEST_CHROME`):
+
+| suite | covers |
+|---|---|
+| `test/patch.test.mjs` | patcher: single-anchor injection, pristine-source guard, deterministic rebuild, plus the real CLI build |
+| `test/leaderboard.test.mjs` | board client: normalization, sorting, zero-score filtering, error paths (fetch stubbed) |
+| `test/hook.test.mjs` | the shipped `src/hook.js` run in headless Chrome against a synthetic game closure: lane-avoidance, attraction, stability bias, `__start`/`__gstate`, `__forceCrash`, crash snapshot |
 
 ## Leaderboard API
 

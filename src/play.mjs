@@ -19,11 +19,12 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { spawn, spawnSync } from 'node:child_process';
 import { startServer } from './server.mjs';
 import { fetchBoard, topScore, ROLES, CITIES } from './leaderboard.mjs';
 
-const root = path.dirname(path.dirname(new URL(import.meta.url).pathname));
+const root = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
 const CLI = process.argv.slice(2);
 const flag = n => { const i = CLI.indexOf('--' + n); return i === -1 ? undefined : CLI[i + 1]; };
 const has = n => CLI.includes('--' + n);
@@ -123,7 +124,10 @@ function findChrome() {
       args: ['--no-sandbox', '--disable-dev-shm-usage', '--window-size=480,940'],
     });
   } catch (e) {
-    die('browser launch failed: ' + e.message + '\n  hint: if it looks like a CDP/version mismatch, point browser.executablePath at a Chrome matching your puppeteer-core (npm i puppeteer-core@<tag>) or use RAENEST_CHROME');
+    const lockBusy = (() => { try { return fs.lstatSync(path.join(profileDir, 'SingletonLock')).isSymbolicLink(); } catch { return false; } })();
+    die('browser launch failed: ' + e.message + (lockBusy
+      ? '\n  hint: ' + profileDir + ' has a SingletonLock — another browser is using this profile, or a stale lock survived a crash. Wait for it to exit, delete the lock file, or pass --profile <dir>.'
+      : '\n  hint: if it looks like a CDP/version mismatch, point browser.executablePath at a Chrome matching your puppeteer-core (npm i puppeteer-core@<tag>) or use RAENEST_CHROME'));
   }
 
   let page;
@@ -145,6 +149,14 @@ function findChrome() {
   const g0 = await gs();
   const fingerprint = await page.evaluate(() => localStorage.getItem('rn-run-pid'));
   if (g0.role !== cfg.role || g0.city !== cfg.city) die(`role/city did not apply (got role=${g0.role} city=${g0.city})`);
+  // Fail fast if upstream renamed/moved the over-card elements we depend on —
+  // better to die here than mid-run with a 45 s #postBtn wait.
+  const REQUIRED_IDS = ['overTitle', 'overReason', 'oScore', 'oStops', 'oDist', 'oCoins', 'oBest', 'nameIn', 'postBtn', 'postStatus', 'resumeBtn'];
+  const missingIds = await page.evaluate(ids => ids.filter(id => !document.getElementById(id)), REQUIRED_IDS);
+  if (missingIds.length) {
+    await browser.close().catch(() => {});
+    die('game DOM changed — required element(s) missing: ' + missingIds.join(', ') + ' (upstream raenest.html renamed/moved them; update REQUIRED_IDS in play.mjs)');
+  }
   say(`page ready: state=${g0.state} role=${g0.role} city=${g0.city} fingerprint=${fingerprint}`);
 
   // ---- video: CDP page screencast -> ffmpeg -> mp4 (phone-sized) ----------
