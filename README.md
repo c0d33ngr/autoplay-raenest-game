@@ -20,6 +20,23 @@ Artifacts (all in `out/`):
 
 Exit codes: `0` target met or all-time beaten · `3` finished without meeting target · `1` fatal error.
 
+## See it in action
+
+Footage from the 2026-10-01 run: freelancer/Lagos, 200,130 pts — posted as **#1 today among freelancers**.
+
+![mid-run at level 19](media/gameplay-mid.png)
+
+*Mid-run: $99,567 at level 19, multiplier ×1.25, next stop queued.*
+
+![game-over card, posted](media/over-card-200k.png)
+
+*Game-over card: $200,130 — 134 jobs, 92.7 km, 6,551 coins — posted #1 today among freelancers.*
+
+Clips (in `media/`):
+
+- [Full-speed gameplay (30 s)](media/clip-gameplay-full-speed.mp4) — dodging at v 760 with stops, coins and power-ups
+- [Target hit → controlled crash → post (92 s)](media/clip-target-hit-post.mp4) — the final $12k sprint, the lock-in crash, and the leaderboard post
+
 ## Configuration
 
 `config.json` (every key has a CLI override):
