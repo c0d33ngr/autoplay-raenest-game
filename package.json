@@ -1,5 +1,5 @@
 {
-  "name": "ai-agent-raenest-game",
+  "name": "autoplay-raenest-game",
   "version": "0.1.0",
   "type": "module",
   "description": "Self-contained agent that plays Raenest Run (fun.raenest.com) on a local server with an injected in-page driver and posts large-margin all-time leaderboard wins, per role.",

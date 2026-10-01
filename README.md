@@ -5,7 +5,7 @@ Self-contained Node codebase that plays **Raenest Run** (the lane-runner at `fun
 ## Quick start
 
 ```bash
-cd ai-agent-raenest-game
+cd autoplay-raenest-game
 npm install
 node src/play.mjs            # config.json defaults: beat <role> all-time top × 1.2, post under config name
 ```
